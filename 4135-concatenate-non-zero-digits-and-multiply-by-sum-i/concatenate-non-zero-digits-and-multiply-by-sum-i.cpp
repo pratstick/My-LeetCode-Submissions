@@ -1,18 +1,24 @@
 class Solution {
 public:
     long long sumAndMultiply(int n) {
-        string num = "";
+        // Safely handle 0 and negative numbers
+        if (n <= 0) return 0; 
+        
         long long sum = 0;
-        if(n==0) return 0;
+        long long reconstructedNum = 0;
+        long long placeValue = 1;
+        
         while (n > 0) {
             int digit = n % 10;
+            
             if (digit > 0) {
-                num += (to_string(digit));
                 sum += digit;
+                reconstructedNum += digit * placeValue;
+                placeValue *= 10; // Shift to the next decimal place (tens, hundreds, etc.)
             }
             n /= 10;
         }
-        reverse(num.begin(),num.end());
-        return stoi(num) * sum;
+        
+        return reconstructedNum * sum;
     }
 };
