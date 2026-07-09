@@ -7,8 +7,10 @@ public:
         for (int row = 1; row < n; row++) {
             for (int col = 0; col < m; col++) {                
                 int bottom = matrix[row - 1][col];
-                int bl = (col - 1 >= 0) ? matrix[row - 1][col - 1] : INT_MAX;
-                int br = (col + 1 < m) ? matrix[row - 1][col + 1] : INT_MAX;
+                int bl = INT_MAX;
+                if(col-1>=0) bl = matrix[row - 1][col - 1];
+                int br = INT_MAX;
+                if(col+1<m) br = matrix[row - 1][col + 1];
                 matrix[row][col] += min({bottom, bl, br});
             }
         }
