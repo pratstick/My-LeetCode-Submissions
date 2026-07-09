@@ -11,9 +11,7 @@ public:
         int p0 = nums[0];
         int p1 = max(nums[1], nums[0]);
         for (int i = 2; i < n; i++) {
-            int take = nums[i] + p0;
-            int notTake = p1;
-            int curr = max(take, notTake);
+            int curr = max(nums[i] + p0, p1);
             p0 = p1;
             p1 = curr;
         }
