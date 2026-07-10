@@ -1,26 +1,26 @@
 class Answer {
-    bool helper(int ind, int sum, int target, vector<int>& arr,
-                vector<vector<int>>& dp) {
-        if (sum > target)
-            return false;
-        if (sum == target)
-            return true;
-        if (ind >= arr.size())
-            return false;
-        if (dp[ind][sum] != -1)
-            return dp[ind][sum];
-        if (helper(ind + 1, sum + arr[ind], target, arr, dp))
-            return dp[ind][sum] = true;
-        if (helper(ind + 1, sum, target, arr, dp))
-            return dp[ind][sum] = true;
-        return dp[ind][sum] = false;
+    bool helper(int ind, int target, const vector<int>& arr, vector<vector<int>>& dp) {
+        if (target == 0) return true;
+        if (ind >= arr.size() || target < 0) return false;
+        
+        if (dp[ind][target] != -1) return dp[ind][target];
+        
+        bool include = false;
+        if (arr[ind] <= target) {
+            include = helper(ind + 1, target - arr[ind], arr, dp);
+        }
+        
+        bool exclude = helper(ind + 1, target, arr, dp);
+        
+        return dp[ind][target] = (include || exclude);
     }
 
 public:
-    bool isSubsetSum(vector<int>& arr, int target) {
-        vector<vector<int>> dp(arr.size(), vector<int>(target + 1, -1));
+    bool isSubsetSum(const vector<int>& arr, int target) {
+        int n = arr.size();
+        vector<vector<int>> dp(n, vector<int>(target + 1, -1));
 
-        return helper(0, 0, target, arr, dp);
+        return helper(0, target, arr, dp);
     }
 };
 
