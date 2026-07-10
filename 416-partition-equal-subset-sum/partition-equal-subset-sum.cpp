@@ -17,7 +17,7 @@ class Answer {
     }
 
 public:
-    bool isSubsetSum(vector<int> arr, int target) {
+    bool isSubsetSum(vector<int>& arr, int target) {
         vector<vector<int>> dp(arr.size(), vector<int>(target + 1, -1));
 
         return helper(0, 0, target, arr, dp);
