@@ -1,24 +1,35 @@
 class Solution {
 private:
     const int MOD = 1e9 + 7;
-    int total = 0;
-    int helper(int ind, int sum, vector<int>& nums,int n, int target,vector<vector<int>>&dp){
-        if (sum < 0 || sum > 2 * total) return 0;
-        if(ind==n){
-            if(sum==target) return 1;
-            else return 0;
-        }
-        
-        if(dp[ind][sum]!=-1) return dp[ind][sum];
-        int neg = helper(ind+1,sum+nums[ind],nums,n,target,dp); 
-        int pos = helper(ind+1,sum-nums[ind],nums,n,target,dp);
-        return dp[ind][sum] = (neg + pos) % MOD;
-    }
+
 public:
-  int findTargetSumWays(vector<int>& nums,int target) {
-        int n = nums.size();
-        total = accumulate(nums.begin(), nums.end(), 0); //offset
-        vector<vector<int>> dp(n, vector<int>(2 * total + 1, -1));
-        return helper(0,total,nums,n,target+total,dp);
- }
+    int findTargetSumWays(vector<int>& arr,int diff) {
+        int n = arr.size();
+        int totalSum = 0;
+        for (int num : arr) totalSum += num;
+        
+       if (abs(diff) > totalSum || (totalSum + diff) % 2 != 0) return 0;
+        int target = (totalSum + diff) / 2;
+
+        vector<vector<int>> dp(n, vector<int>(target + 1, 0));
+
+        if (arr[0] == 0) dp[0][0] = 2; // Choose or don't choose 0
+        else dp[0][0] = 1;             // Don't choose arr[0]
+
+        if (arr[0] != 0 && arr[0] <= target) dp[0][arr[0]] = 1; // Choose arr[0]
+
+        // Fill the DP table
+        for (int ind = 1; ind < n; ind++) {
+            for (int t = 0; t <= target; t++) {
+                int notTake = dp[ind - 1][t];
+                int take = 0;
+                if (arr[ind] <= t) {
+                    take = dp[ind - 1][t - arr[ind]];
+                }
+                dp[ind][t] = (take + notTake) % MOD;
+            }
+        }
+
+        return dp[n - 1][target];
+    }
 };
