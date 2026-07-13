@@ -1,21 +1,27 @@
+vector<int> ans;
 class Solution {
-public:
-    vector<int> sequentialDigits(int low, int high) {
-        vector<int> result;
-        string digits = "123456789";
-        
-        int min_len = to_string(low).length();
-        int max_len = to_string(high).length();
-        for (int len = min_len; len <= max_len; ++len) {
-            for (int start = 0; start <= 9 - len; ++start) {
-                std::string sub = digits.substr(start, len);
-                int num = std::stoi(sub);
-                if (num >= low && num <= high) {
-                    result.push_back(num);
-                }
+private:
+    void generate(){
+        for(int i=1;i<=9;i++){
+            int num = i;            
+            for(int j = i+1;j<=9;j++){
+                num= num*10+j;
+                ans.push_back(num);
             }
         }
-        
-        return result;
+        sort(ans.begin(),ans.end());
+    }
+public:
+    vector<int> sequentialDigits(int low, int high) {
+        if(ans.empty()){
+            generate();
+        }
+        vector<int> res;
+        for(auto&it:ans){
+            if(it>=low && it<=high) res.push_back(it);
+        }
+
+        return res;
+
     }
 };
