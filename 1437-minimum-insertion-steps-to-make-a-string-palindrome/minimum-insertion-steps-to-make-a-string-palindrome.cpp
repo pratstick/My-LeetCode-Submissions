@@ -1,30 +1,30 @@
 class Solution {
-   private:
-    int helper(int ind1, int ind2, const string& str1, const string& str2,
-               vector<vector<int>>& dp) {
-        if (ind1 < 0 || ind2 < 0) return 0;
-        if (dp[ind1][ind2] != -1) return dp[ind1][ind2];
-        int match = 0;
-        if (str1[ind1] == str2[ind2]) {
-            return  dp[ind1][ind2] = match = 1 + helper(ind1 - 1, ind2 - 1, str1, str2, dp);
-        }
-        int skip_str1 = helper(ind1 - 1, ind2, str1, str2, dp);
-        int skip_str2 = helper(ind1, ind2 - 1, str1, str2, dp);
-        return dp[ind1][ind2] = max(skip_str1, skip_str2);
-    }
-
-    int lcs(string& str1, string& str2) {
+private:
+    int lcs(const string& str1, const string& str2) {
         int m = str1.size();
         int n = str2.size();
-        vector<vector<int>> dp(m, vector<int>(n, -1));
-        return helper(m - 1, n - 1, str1, str2, dp);
+        vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));     
+
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (str1[i - 1] == str2[j - 1]) {
+                    dp[i][j] = 1 + dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        
+        return dp[m][n];
     }
+
     int longestPalinSubseq(string s) {
         string reversed(s.rbegin(), s.rend());
-        return lcs(s,reversed);
+        return lcs(s, reversed);
     }
+
 public:
-    int minInsertions(string s){
+    int minInsertions(string s) {
         return s.size() - longestPalinSubseq(s);
     }
 };
