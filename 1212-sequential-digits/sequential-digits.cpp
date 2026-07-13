@@ -19,6 +19,7 @@ public:
         vector<int> res;
         for(auto&it:ans){
             if(it>=low && it<=high) res.push_back(it);
+            if(it>high) break;
         }
 
         return res;
