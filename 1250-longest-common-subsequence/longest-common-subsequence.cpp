@@ -1,22 +1,20 @@
 class Solution {
-private:
-    int helper(int ind1, int ind2, const string& str1, const string& str2,
-               vector<vector<int>>& dp) {
-        if (ind1 < 0 || ind2 < 0) return 0;
-        if (dp[ind1][ind2] != -1) return dp[ind1][ind2];
-        int match = 0;
-        if (str1[ind1] == str2[ind2]) {
-            match = 1 + helper(ind1 - 1, ind2 - 1, str1, str2, dp);
-        }
-        int skip_str1 = helper(ind1 - 1, ind2, str1, str2, dp);
-        int skip_str2 = helper(ind1, ind2 - 1, str1, str2, dp);
-        return dp[ind1][ind2] = max({match, skip_str1, skip_str2});
-    }
 public:
     int longestCommonSubsequence(string text1, string text2) {
         int m = text1.size();
         int n = text2.size();
-        vector<vector<int>> dp(m, vector<int>(n, -1));
-        return helper(m-1,n-1,text1,text2,dp);        
+        vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
+        for(int i=1;i<=m;i++){
+            for(int j = 1; j <= n; j++){
+                int match = 0;
+                if (text1[i-1] == text2[j-1]) {
+                    match = 1 + dp[i-1][j-1];
+                }
+                int skip_str1 = (i>=1)?dp[i-1][j]:0;
+                int skip_str2 = (j>=1)?dp[i][j-1]:0;
+                dp[i][j] = max({match,skip_str1,skip_str2});
+            }
+        }
+        return dp[m][n];      
     }
 };
