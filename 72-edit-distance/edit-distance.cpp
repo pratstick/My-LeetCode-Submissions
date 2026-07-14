@@ -1,5 +1,4 @@
 class Solution {
-    string s1,s2;
     private:
     int helper(int i, int j,string s1, string s2, vector<vector<int>>&dp){
         if(j<0) return i+1;
