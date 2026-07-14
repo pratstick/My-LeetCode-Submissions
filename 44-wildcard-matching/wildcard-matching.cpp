@@ -1,35 +1,27 @@
-
 class Solution {
-   public:
-    bool isMatch(string str, string pat) {
-        int n = str.size();
-        int m = pat.size();
-        vector<bool> prev(m + 1, false);
-        prev[0] = true;
-        for(int j = 1; j <= m; j++) {
-            bool flag = true;
-            for (int k = 1; k <= j; k++) {
-                if (pat[k - 1] != '*') {
-                    flag = false;
-                    break;
-                }
+public:
+    bool isMatch(string s, string p) {
+        int si = 0, pi = 0, match = 0, star = -1;
+        int sn = s.length(), pn = p.length();
+        while (si < sn) {
+            if (pi < pn && (p[pi] == '?' || p[pi] == s[si])) {
+                si++;
+                pi++;
+            } else if (pi < pn && p[pi] == '*') {
+                star = pi;
+                match = si;
+                pi++;
+            } else if (star != -1) {
+                pi = star + 1;
+                match++;
+                si = match;
+            } else {
+                return false;
             }
-            prev[j] = flag;
         }
-        for (int i = 1; i <= n; i++) {
-            vector<bool> curr(m + 1, false);
-             for (int j = 1; j <= m; j++) {
-                if (str[i - 1] == pat[j - 1] || pat[j - 1] == '?') {
-                    curr[j] = prev[j - 1];
-                }
-
-                else if (pat[j - 1] == '*') {
-                    curr[j] = curr[j - 1] || prev[j];
-                }
-            }
-            prev = curr;
+        while (pi < pn && p[pi] == '*') {
+            pi++;
         }
-
-        return prev[m];
+        return pi == pn;
     }
 };
