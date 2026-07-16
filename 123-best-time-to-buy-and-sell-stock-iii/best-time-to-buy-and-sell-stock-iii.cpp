@@ -1,27 +1,18 @@
-class Solution{
+class Solution {
 public:
-    int maxProfit(vector<int>& arr){
+    int maxProfit(vector<int>& arr) {
         int n = arr.size();
-        vector<vector<vector<int>>> dp(
-            n + 1,
-            vector<vector<int>>(2, vector<int>(3, 0))
-        );
+        vector<vector<int>> next_dp(2, vector<int>(3, 0));
+        vector<vector<int>> curr(2, vector<int>(3, 0));
 
-        for(int ind = n - 1; ind >= 0; ind--){
-            for(int buy = 0; buy <= 1; buy++){
-                for(int cap = 1; cap <= 2; cap++){
-                    if(buy){
-                        dp[ind][1][cap] =
-                            max(-arr[ind] + dp[ind+1][0][cap],
-                                dp[ind+1][1][cap]);
-                    }else{
-                        dp[ind][0][cap] =
-                            max(arr[ind] + dp[ind+1][1][cap-1],
-                                dp[ind+1][0][cap]);
-                    }
-                }
+        for (int ind = n - 1; ind >= 0; ind--) {
+            for (int cap = 1; cap <= 2; cap++) {
+                curr[1][cap] = max(-arr[ind] + next_dp[0][cap], next_dp[1][cap]);
+                curr[0][cap] = max(arr[ind] + next_dp[1][cap - 1], next_dp[0][cap]);
             }
+            next_dp = curr;
         }
-        return dp[0][1][2];
+        
+        return next_dp[1][2];
     }
 };
