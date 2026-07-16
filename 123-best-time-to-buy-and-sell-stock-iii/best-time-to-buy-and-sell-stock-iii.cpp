@@ -1,17 +1,27 @@
-class Solution {
-private:
-    int f(int ind, int buy, int txn, vector<int>&arr, int n,vector<vector<vector<int>>>&dp){
-        if(ind>=n||txn>=2) return 0;
-        if(dp[ind][buy][txn]!=-1) return dp[ind][buy][txn];
-        if(buy){
-            return dp[ind][buy][txn] = max(-arr[ind] + f(ind+1,0,txn,arr,n,dp),f(ind+1,1,txn,arr,n,dp));
-        }
-        else return dp[ind][buy][txn] = max(arr[ind] + f(ind+1,1,txn+1,arr,n,dp),f(ind+1,0,txn,arr,n,dp));
-    }
+class Solution{
 public:
-    int maxProfit(vector<int>& prices) {
-        int n = prices.size();
-        vector<vector<vector<int>>>dp(n,vector<vector<int>>(2,vector<int>(3,-1)));        
-        return f(0,1,0,prices,n,dp);
+    int maxProfit(vector<int>& arr){
+        int n = arr.size();
+        vector<vector<vector<int>>> dp(
+            n + 1,
+            vector<vector<int>>(2, vector<int>(3, 0))
+        );
+
+        for(int ind = n - 1; ind >= 0; ind--){
+            for(int buy = 0; buy <= 1; buy++){
+                for(int cap = 1; cap <= 2; cap++){
+                    if(buy){
+                        dp[ind][1][cap] =
+                            max(-arr[ind] + dp[ind+1][0][cap],
+                                dp[ind+1][1][cap]);
+                    }else{
+                        dp[ind][0][cap] =
+                            max(arr[ind] + dp[ind+1][1][cap-1],
+                                dp[ind+1][0][cap]);
+                    }
+                }
+            }
+        }
+        return dp[0][1][2];
     }
 };
