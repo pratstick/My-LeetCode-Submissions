@@ -15,6 +15,6 @@ public:
             *it = nums[i];
         }
       }
-      return ans.size();
+      return len;
     }    
 };
