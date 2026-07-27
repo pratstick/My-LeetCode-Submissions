@@ -17,15 +17,6 @@ struct Node {
     bool isEnd() {
         return flag;
     }
-
-    ~Node() {
-        for (int i = 0; i < 26; i++) {
-            if (links[i] != nullptr) {
-                delete links[i];
-                links[i] = nullptr;
-            }
-        }
-    }
 };
 
 class Trie {
@@ -35,10 +26,6 @@ private:
 public:
     Trie() {
         root = new Node();
-    }
-
-    ~Trie() {
-        delete root;
     }
     void insert(string word) {
         Node* node = root;
