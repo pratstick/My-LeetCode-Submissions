@@ -1,33 +1,46 @@
 class Solution {
-public:
-    double findMedianSortedArrays(vector<int> &arr1, vector<int> &arr2) {
-        int n1 = arr1.size();
-        int n2 = arr2.size();
-        int n = n1 + n2;
-        
-        int i = 0, j = 0;
-        int prev = 0, curr = 0;
-        
-        for (int count = 0; count <= n / 2; ++count) {
-            prev = curr;
-            if (i < n1 && j < n2) {
-                if (arr1[i] < arr2[j]) {
-                    curr = arr1[i++];
+private:
+    double calc(const vector<int>& arr1, const vector<int>& arr2, int n1, int n2, int left) {
+        int low = 0, high = n1;
+        int total = n1 + n2;
+
+        while (low <= high) {
+            int mid1 = low + (high - low) / 2; // Elements taken from arr1
+            int mid2 = left - mid1;            // Elements taken from arr2
+
+            int l1 = (mid1 > 0) ? arr1[mid1 - 1] : INT_MIN;
+            int l2 = (mid2 > 0) ? arr2[mid2 - 1] : INT_MIN;
+            int r1 = (mid1 < n1) ? arr1[mid1] : INT_MAX;
+            int r2 = (mid2 < n2) ? arr2[mid2] : INT_MAX;
+
+            if (l1 <= r2 && l2 <= r1) {
+                if (total % 2 == 1) {
+                    return max(l1, l2);
                 } else {
-                    curr = arr2[j++];
+                    return (max(l1, l2) + min(r1, r2)) / 2.0; 
                 }
-            } else if (i < n1) {
-                curr = arr1[i++];
+            } 
+            
+            else if (l1 > r2) {
+                high = mid1 - 1;
             } else {
-                curr = arr2[j++];
+                low = mid1 + 1;
             }
         }
+        return 0.0;
+    }
+
+public:
+    double findMedianSortedArrays(vector<int>& arr1, vector<int>& arr2) {
+        int n1 = arr1.size();
+        int n2 = arr2.size();
         
-        if (n % 2 == 1) {
-            return curr;
-        }
-        else {
-            return (double)(prev + curr) / 2.0;
+        if (n1 <= n2) {
+            int left = (n1 + n2 + 1) / 2;
+            return calc(arr1, arr2, n1, n2, left);
+        } else {
+            int left = (n1 + n2 + 1) / 2;
+            return calc(arr2, arr1, n2, n1, left);
         }
     }
 };
