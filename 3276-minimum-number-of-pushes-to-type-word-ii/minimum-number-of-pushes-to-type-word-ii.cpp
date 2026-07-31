@@ -1,13 +1,11 @@
 class Solution {
 public:
     int minimumPushes(string word) {
-        unordered_map<char,int>mpp;
-        for(char c:word)mpp[c]++;
-        int ans = 0;
-        vector<int> freq;
-        for(auto&it:mpp){
-            freq.push_back(it.second);
+        vector<int> freq(26, 0);
+        for (char c : word) {
+            freq[c - 'a']++;
         }
+        int ans = 0;
         sort(freq.rbegin(),freq.rend());
         for(int i=0;i<freq.size();i++){
             if(i<=7) ans+=freq[i];
