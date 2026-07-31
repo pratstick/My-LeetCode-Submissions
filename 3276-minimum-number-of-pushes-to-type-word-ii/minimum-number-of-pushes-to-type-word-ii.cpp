@@ -8,6 +8,7 @@ public:
         int ans = 0;
         sort(freq.rbegin(),freq.rend());
         for(int i=0;i<freq.size();i++){
+            if(freq[i]==0) break;
             if(i<=7) ans+=freq[i];
             else if(i<=15) ans+=(freq[i]*2);
             else if(i<=23) ans+=(freq[i]*3);
