@@ -1,19 +1,24 @@
 class Solution {
 public:
     vector<int> lastVisitedCell(vector<vector<char>>& grid) {
-        int n = grid.size();
-        int m = grid[0].size();
-        vector<vector<int>> vis(n,vector<int>(m,0));
+        int n = grid.size(), m = grid[0].size();
         int i = 0, j = 0;
-        int pi = i, pj = j;
-        while( i >= 0 && i < n && j >= 0 && j < m && !vis[i][j]){
-            vis[i][j] = 1;
-            pi = i, pj = j;
-            if(grid[i][j]=='L') j--;
-            else if(grid[i][j]=='R') j++;
-            else if(grid[i][j]=='U') i--;
+        int pi = 0, pj = 0;
+
+        while (i >= 0 && i < n && j >= 0 && j < m
+               && grid[i][j] != '#') {
+            char dir = grid[i][j];
+            grid[i][j] = '#';
+
+            pi = i;
+            pj = j;
+
+            if (dir == 'L') j--;
+            else if (dir == 'R') j++;
+            else if (dir == 'U') i--;
             else i++;
         }
-        return {pi,pj};
+
+        return {pi, pj};
     }
 };
